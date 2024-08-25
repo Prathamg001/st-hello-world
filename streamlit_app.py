@@ -34,11 +34,12 @@ async def process_request(request: Request):
     body = await request.json()
 
     # Extract the required data from the request body
-    user_id = body.get("user_id", "")
-    college_email = body.get("college_email", "")
-    college_roll_number = body.get("college_roll_number", "")
-    numbers = body.get("numbers", [])
-    alphabets = body.get("alphabets", [])
+    data = body.get("data", [])
+
+    # Categorize data into alphabets, numbers, and symbols
+    numbers = [item for item in data if item.isdigit()]
+    alphabets = [item for item in data if item.isalpha()]
+    symbols = [item for item in data if not item.isalnum()]
 
     # Find the highest lowercase alphabet
     lowercase_alphabets = [char for char in alphabets if char.islower()]
@@ -47,11 +48,9 @@ async def process_request(request: Request):
     # Prepare the response
     response = {
         "status": "success",
-        "user_id": user_id,
-        "college_email": college_email,
-        "college_roll_number": college_roll_number,
         "numbers": numbers,
         "alphabets": alphabets,
+        "symbols": symbols,
         "highest_lowercase_alphabet": highest_lowercase_alphabet
     }
 
@@ -80,17 +79,20 @@ def render_response(response_data, selected_option):
         st.success("Data processed successfully!")
 
         if selected_option == "Alphabets & Numbers":
-            if "alphabets" in response_data and "numbers" in response_data:
-                alphabets = response_data["alphabets"]
-                numbers = response_data["numbers"]
-                st.write("Alphabets and Numbers:")
-                st.write(f"Alphabets: {', '.join(alphabets)}")
-                st.write(f"Numbers: {', '.join(map(str, numbers))}")
-            else:
-                st.write("No data found for Alphabets and Numbers.")
+            alphabets = response_data.get("alphabets", [])
+            numbers = response_data.get("numbers", [])
+            st.write("Alphabets and Numbers:")
+            st.write(f"Alphabets: {', '.join(alphabets)}")
+            st.write(f"Numbers: {', '.join(map(str, numbers))}")
         elif selected_option == "Symbols":
-            st.write("No Symbols option implemented.")
-        # Add more options as needed
+            symbols = response_data.get("symbols", [])
+            st.write("Symbols:")
+            st.write(f"Symbols: {', '.join(symbols)}")
+
+        # Display the highest lowercase alphabet
+        highest_lowercase = response_data.get("highest_lowercase_alphabet", "")
+        if highest_lowercase:
+            st.write(f"Highest Lowercase Alphabet: {highest_lowercase}")
 
 def main():
     st.set_page_config(page_title="21BCE1966")
@@ -109,7 +111,7 @@ def main():
     st.header("Bajaj Finserv Health Challenge: By Pratham Gupta")
     st.markdown("<h1 style='text-align: center; color: red;'>21BCE1966</h1>", unsafe_allow_html=True)
 
-    input_data = st.text_area("Enter JSON data", placeholder='{"user_id": "21BCE1966", "college_email": "abc@example.com", "college_roll_number": "21BCE1966", "numbers": [1, 2, 3], "alphabets": ["A", "C", "z"]}')
+    input_data = st.text_area("Enter JSON data", placeholder='{"data": ["A", "C", "Z", "c", "i"]}')
 
     options = ["Alphabets & Numbers", "Symbols"]
     selected_option = st.selectbox("Select an option", options)
