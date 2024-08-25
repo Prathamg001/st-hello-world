@@ -60,7 +60,7 @@ def main():
     st.header("Bajaj Finserv Health Challenge: By Pratham Gupta")
 
     # Big Title
-    st.markdown("<h1 style='text-align: center; color: red;'>21BCE5542</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: red;'>21BCE1966</h1>", unsafe_allow_html=True)
 
     # Get user input
     input_data = st.text_area("Enter JSON data", placeholder='{"data": ["A", "C", "z"]}')
