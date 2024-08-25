@@ -57,7 +57,7 @@ def main():
     )
 
     # Header
-    st.header("Data Processing Application")
+    st.header("Bajaj Finserv Health Challenge: By Aastha Tiwari")
 
     # Big Title
     st.markdown("<h1 style='text-align: center; color: red;'>21BCE5542</h1>", unsafe_allow_html=True)
@@ -83,5 +83,5 @@ def main():
         # Render the response based on the selected option
         render_response(response, selected_option)
 
-if __name_ == "__main__":
+if __name__ == "__main__":
     main()
